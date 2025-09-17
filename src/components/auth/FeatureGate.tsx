@@ -88,7 +88,7 @@ export default function FeatureGate({
       </CardHeader>
       <CardContent className="text-center space-y-4">
         <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-2">What you'll get with {requiredPlan}:</h4>
+          <h4 className="font-medium text-gray-900 mb-2">What you&apos;ll get with {requiredPlan}:</h4>
           <ul className="text-sm text-gray-600 space-y-1">
             <li className="flex items-center justify-center">
               <Zap className="h-4 w-4 text-yellow-500 mr-2" />

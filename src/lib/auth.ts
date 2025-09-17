@@ -23,13 +23,13 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = await getUserByEmail(credentials.email);
-        if (!user) {
+        if (!user || !user.password_hash) {
           return null;
         }
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.password_hash || ''
+          user.password_hash
         );
 
         if (!isPasswordValid) {
@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           email: user.email,
           name: user.name,
-          image: user.image_url,
+          image: user.imageUrl,
         };
       },
     }),
@@ -55,9 +55,9 @@ export const authOptions: NextAuthOptions = {
               email: user.email!,
               name: user.name || '',
               provider: 'google',
-              provider_id: user.id,
-              image_url: user.image,
-              email_verified: true,
+              providerId: user.id,
+              imageUrl: user.image || undefined,
+              emailVerified: true,
             });
           }
           return true;
@@ -83,7 +83,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
   },
   session: {
     strategy: 'jwt',

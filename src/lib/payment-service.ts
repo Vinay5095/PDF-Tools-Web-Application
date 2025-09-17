@@ -8,10 +8,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 });
 
 // Razorpay Configuration
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || '',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || '',
-});
+let razorpay: any = null;
+if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+}
 
 export const paymentProviders: PaymentProvider[] = [
   {
@@ -125,6 +128,7 @@ export class StripeService {
 
 export class RazorpayService {
   static async createCustomer(email: string, name?: string, contact?: string): Promise<any> {
+    if (!razorpay) throw new Error('Razorpay not configured');
     return await razorpay.customers.create({
       email,
       name,
@@ -135,14 +139,20 @@ export class RazorpayService {
   static async createSubscription(
     planId: string,
     customerId?: string,
-    totalCount?: number
+    totalCount: number = 12
   ): Promise<any> {
-    return await razorpay.subscriptions.create({
+    if (!razorpay) throw new Error('Razorpay not configured');
+    const params: any = {
       plan_id: planId,
-      customer_id: customerId,
       total_count: totalCount,
       quantity: 1,
-    });
+    };
+    
+    if (customerId) {
+      params.customer_id = customerId;
+    }
+    
+    return await razorpay.subscriptions.create(params);
   }
 
   static async createOrder(
@@ -150,6 +160,7 @@ export class RazorpayService {
     currency: string = 'INR',
     receipt?: string
   ): Promise<any> {
+    if (!razorpay) throw new Error('Razorpay not configured');
     return await razorpay.orders.create({
       amount: Math.round(amount * 100), // Convert to paise
       currency,
@@ -158,12 +169,15 @@ export class RazorpayService {
   }
 
   static async cancelSubscription(subscriptionId: string, cancelAtCycleEnd: boolean = true): Promise<any> {
-    return await razorpay.subscriptions.cancel(subscriptionId, {
+    if (!razorpay) throw new Error('Razorpay not configured');
+    // Note: Razorpay cancellation might need to be handled differently based on their API
+    return await (razorpay.subscriptions as any).cancel(subscriptionId, {
       cancel_at_cycle_end: cancelAtCycleEnd ? 1 : 0,
     });
   }
 
   static async getSubscription(subscriptionId: string): Promise<any> {
+    if (!razorpay) throw new Error('Razorpay not configured');
     return await razorpay.subscriptions.fetch(subscriptionId);
   }
 
@@ -173,6 +187,7 @@ export class RazorpayService {
     currency: string = 'INR',
     description?: string
   ): Promise<any> {
+    if (!razorpay) throw new Error('Razorpay not configured');
     return await razorpay.plans.create({
       period: periodType,
       interval: 1,
@@ -189,8 +204,10 @@ export class RazorpayService {
     signature: string,
     secret: string
   ): boolean {
+    if (!razorpay) return false;
     try {
-      return razorpay.webhooks.validateWebhookSignature(payload, signature, secret);
+      // Use the correct method name for Razorpay webhook validation
+      return (razorpay as any).validateWebhookSignature(payload, signature, secret);
     } catch (error) {
       console.error('Razorpay webhook verification failed:', error);
       return false;

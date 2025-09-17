@@ -4,6 +4,7 @@ export interface User {
   id: number;
   email: string;
   name?: string;
+  password_hash?: string;
   provider: 'email' | 'google' | 'github';
   providerId?: string;
   emailVerified: boolean;

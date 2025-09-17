@@ -33,9 +33,9 @@ export async function createUser(userData: {
   name?: string;
   password?: string;
   provider?: string;
-  provider_id?: string;
-  image_url?: string;
-  email_verified?: boolean;
+  providerId?: string;
+  imageUrl?: string;
+  emailVerified?: boolean;
 }): Promise<User | null> {
   try {
     const {
@@ -43,9 +43,9 @@ export async function createUser(userData: {
       name,
       password,
       provider = 'email',
-      provider_id,
-      image_url,
-      email_verified = false,
+      providerId,
+      imageUrl,
+      emailVerified = false,
     } = userData;
 
     let passwordHash = null;
@@ -57,7 +57,7 @@ export async function createUser(userData: {
       `INSERT INTO users (email, name, password_hash, provider, provider_id, image_url, email_verified)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
-      [email, name, passwordHash, provider, provider_id, image_url, email_verified]
+      [email, name, passwordHash, provider, providerId, imageUrl, emailVerified]
     );
 
     return result.rows[0];
