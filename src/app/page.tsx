@@ -2,48 +2,80 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, FileArchive, Scissors, FileImage, Download, Info } from "lucide-react";
+import { FileText, FileArchive, Scissors, FileImage, Download, Info, User, LogOut, Eye, Shield, Crown } from "lucide-react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import AdBanner from "@/components/ads/AdBanner";
+import Link from "next/link";
 
 const pdfTools = [
   {
     icon: FileArchive,
     title: "Merge PDF",
     description: "Combine multiple PDF files into one",
-    href: "/merge"
+    href: "/merge",
+    isPremium: false
   },
   {
     icon: Scissors,
     title: "Split PDF", 
     description: "Split a PDF into multiple files",
-    href: "/split"
+    href: "/split",
+    isPremium: false
   },
   {
     icon: FileArchive,
     title: "Compress PDF",
     description: "Reduce PDF file size",
-    href: "/compress"
+    href: "/compress",
+    isPremium: false
   },
   {
     icon: FileImage,
     title: "PDF to Images",
     description: "Convert PDF pages to images",
-    href: "/pdf-to-images"
+    href: "/pdf-to-images",
+    isPremium: false
   },
   {
     icon: FileText,
     title: "Images to PDF",
     description: "Convert images to PDF",
-    href: "/images-to-pdf"
+    href: "/images-to-pdf",
+    isPremium: false
   },
   {
     icon: Info,
     title: "PDF Info",
     description: "Get PDF document information",
-    href: "/pdf-info"
+    href: "/pdf-info",
+    isPremium: false
+  },
+  {
+    icon: Eye,
+    title: "OCR Text Extraction",
+    description: "Extract text from scanned PDFs",
+    href: "/ocr",
+    isPremium: true
+  },
+  {
+    icon: Shield,
+    title: "PDF Watermark",
+    description: "Add watermarks to protect your PDFs",
+    href: "/watermark",
+    isPremium: true
+  },
+  {
+    icon: Crown,
+    title: "Digital Signature",
+    description: "Sign PDFs with digital certificates",
+    href: "/signature",
+    isPremium: true
   }
 ];
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -54,10 +86,38 @@ export default function Home() {
               <FileText className="h-8 w-8 text-blue-600" />
               <h1 className="text-2xl font-bold text-gray-900">PDF Tools</h1>
             </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-600 hover:text-gray-900">Home</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+            <nav className="flex items-center space-x-4">
+              <div className="hidden md:flex space-x-8">
+                <a href="#" className="text-gray-600 hover:text-gray-900">Home</a>
+                <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
+                <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
+                <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+              </div>
+              <div className="flex items-center space-x-2">
+                {session ? (
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm text-gray-600">Hi, {session.user?.name || session.user?.email}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => signOut()}
+                      className="flex items-center space-x-1"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Sign Out</span>
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    onClick={() => signIn()}
+                    className="flex items-center space-x-1"
+                  >
+                    <User className="h-4 w-4" />
+                    <span>Sign In</span>
+                  </Button>
+                )}
+              </div>
             </nav>
           </div>
         </div>
@@ -76,6 +136,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Ad Banner - Top */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <AdBanner
+          slot="1234567890"
+          format="horizontal"
+          className="flex justify-center"
+        />
+      </div>
+
       {/* Tools Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -83,20 +152,30 @@ export default function Home() {
             {pdfTools.map((tool, index) => {
               const Icon = tool.icon;
               return (
-                <Card key={index} className="hover:shadow-lg transition-shadow duration-200 cursor-pointer">
+                <Card key={index} className={`hover:shadow-lg transition-shadow duration-200 cursor-pointer ${tool.isPremium ? 'border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50' : ''}`}>
                   <CardHeader className="text-center">
-                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                      <Icon className="h-8 w-8 text-blue-600" />
+                    <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
+                      tool.isPremium ? 'bg-gradient-to-br from-purple-500 to-blue-600' : 'bg-blue-100'
+                    }`}>
+                      <Icon className={`h-8 w-8 ${tool.isPremium ? 'text-white' : 'text-blue-600'}`} />
                     </div>
-                    <CardTitle className="text-lg">{tool.title}</CardTitle>
+                    <div className="flex items-center justify-center space-x-2">
+                      <CardTitle className="text-lg">{tool.title}</CardTitle>
+                      {tool.isPremium && (
+                        <Crown className="h-4 w-4 text-purple-600" />
+                      )}
+                    </div>
                     <CardDescription>{tool.description}</CardDescription>
+                    {tool.isPremium && (
+                      <div className="text-xs text-purple-600 font-medium">Premium Feature</div>
+                    )}
                   </CardHeader>
                   <CardContent className="text-center">
                     <Button 
-                      className="w-full" 
+                      className={`w-full ${tool.isPremium ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700' : ''}`}
                       onClick={() => window.location.href = tool.href}
                     >
-                      Select Files
+                      {tool.isPremium ? 'Try Premium' : 'Select Files'}
                     </Button>
                   </CardContent>
                 </Card>
@@ -105,6 +184,15 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Ad Banner - Middle */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <AdBanner
+          slot="0987654321"
+          format="rectangle"
+          className="flex justify-center"
+        />
+      </div>
 
       {/* Features Section */}
       <section className="py-16 bg-white">
