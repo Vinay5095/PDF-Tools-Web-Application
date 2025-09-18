@@ -79,19 +79,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <FileText className="h-8 w-8 text-blue-600" />
+              <FileText className="h-8 w-8 text-blue-600" aria-hidden="true" />
               <h1 className="text-2xl font-bold text-gray-900">PDF Tools</h1>
             </div>
-            <nav className="flex items-center space-x-4">
+            <nav className="flex items-center space-x-4" role="navigation" aria-label="Main navigation">
               <div className="hidden md:flex space-x-8">
-                <a href="#" className="text-gray-600 hover:text-gray-900">Home</a>
+                <span className="text-blue-600 font-medium" aria-current="page">Home</span>
                 <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
-                <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+                <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
+                <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
               </div>
               <div className="flex items-center space-x-2">
                 {session ? (
@@ -102,8 +102,9 @@ export default function Home() {
                       size="sm"
                       onClick={() => signOut()}
                       className="flex items-center space-x-1"
+                      aria-label="Sign out of your account"
                     >
-                      <LogOut className="h-4 w-4" />
+                      <LogOut className="h-4 w-4" aria-hidden="true" />
                       <span>Sign Out</span>
                     </Button>
                   </div>
@@ -112,8 +113,9 @@ export default function Home() {
                     variant="outline"
                     onClick={() => signIn()}
                     className="flex items-center space-x-1"
+                    aria-label="Sign in to your account"
                   >
-                    <User className="h-4 w-4" />
+                    <User className="h-4 w-4" aria-hidden="true" />
                     <span>Sign In</span>
                   </Button>
                 )}
@@ -146,34 +148,41 @@ export default function Home() {
       </div>
 
       {/* Tools Grid */}
-      <section className="py-16">
+      <section className="py-16" aria-labelledby="tools-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 id="tools-heading" className="sr-only">Available PDF Tools</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pdfTools.map((tool, index) => {
               const Icon = tool.icon;
               return (
-                <Card key={index} className={`hover:shadow-lg transition-shadow duration-200 cursor-pointer ${tool.isPremium ? 'border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50' : ''}`}>
+                <Card 
+                  key={index} 
+                  className={`hover:shadow-lg transition-shadow duration-200 cursor-pointer ${tool.isPremium ? 'border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50' : ''}`}
+                  role="article"
+                  aria-labelledby={`tool-${index}-title`}
+                >
                   <CardHeader className="text-center">
                     <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
                       tool.isPremium ? 'bg-gradient-to-br from-purple-500 to-blue-600' : 'bg-blue-100'
-                    }`}>
+                    }`} aria-hidden="true">
                       <Icon className={`h-8 w-8 ${tool.isPremium ? 'text-white' : 'text-blue-600'}`} />
                     </div>
                     <div className="flex items-center justify-center space-x-2">
-                      <CardTitle className="text-lg">{tool.title}</CardTitle>
+                      <CardTitle id={`tool-${index}-title`} className="text-lg">{tool.title}</CardTitle>
                       {tool.isPremium && (
-                        <Crown className="h-4 w-4 text-purple-600" />
+                        <Crown className="h-4 w-4 text-purple-600" aria-label="Premium feature" />
                       )}
                     </div>
                     <CardDescription>{tool.description}</CardDescription>
                     {tool.isPremium && (
-                      <div className="text-xs text-purple-600 font-medium">Premium Feature</div>
+                      <div className="text-xs text-purple-600 font-medium" aria-label="This is a premium feature">Premium Feature</div>
                     )}
                   </CardHeader>
                   <CardContent className="text-center">
                     <Button 
                       className={`w-full ${tool.isPremium ? 'bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700' : ''}`}
                       onClick={() => window.location.href = tool.href}
+                      aria-label={`${tool.isPremium ? 'Try premium feature' : 'Use'} ${tool.title}`}
                     >
                       {tool.isPremium ? 'Try Premium' : 'Select Files'}
                     </Button>
@@ -181,6 +190,66 @@ export default function Home() {
                 </Card>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Features Highlight */}
+      <section className="py-16 bg-gradient-to-br from-purple-50 to-blue-50" aria-labelledby="premium-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-6" aria-hidden="true">
+              <Crown className="h-8 w-8 text-white" />
+            </div>
+            <h3 id="premium-heading" className="text-3xl font-bold text-gray-900 mb-4">Unlock Premium Features</h3>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Take your PDF processing to the next level with advanced features designed for power users and professionals.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <Card className="border-purple-200 bg-white">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+                  <Eye className="h-6 w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-lg">OCR Text Extraction</CardTitle>
+                <CardDescription>Extract text from scanned PDFs and images with high accuracy</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-purple-200 bg-white">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+                  <Shield className="h-6 w-6 text-blue-600" />
+                </div>
+                <CardTitle className="text-lg">Digital Signatures</CardTitle>
+                <CardDescription>Sign PDFs with digital certificates for legal compliance</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-purple-200 bg-white">
+              <CardHeader className="text-center">
+                <div className="mx-auto w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+                  <FileArchive className="h-6 w-6 text-indigo-600" />
+                </div>
+                <CardTitle className="text-lg">Batch Processing</CardTitle>
+                <CardDescription>Process multiple files at once with advanced automation</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+
+          <div className="text-center">
+            <Link href="/pricing">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                aria-label="View premium pricing plans"
+              >
+                <Crown className="h-5 w-5 mr-2" aria-hidden="true" />
+                Explore Premium Plans
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -195,29 +264,29 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white" aria-labelledby="features-heading">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Our PDF Tools?</h3>
+            <h3 id="features-heading" className="text-3xl font-bold text-gray-900 mb-4">Why Choose Our PDF Tools?</h3>
             <p className="text-lg text-gray-600">Secure, fast, and completely free PDF processing</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                 <FileText className="h-8 w-8 text-green-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">100% Secure</h4>
               <p className="text-gray-600">Your files are processed locally and deleted after use</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                 <FileArchive className="h-8 w-8 text-purple-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">Lightning Fast</h4>
               <p className="text-gray-600">Process your PDFs in seconds with our optimized tools</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4" aria-hidden="true">
                 <Download className="h-8 w-8 text-orange-600" />
               </div>
               <h4 className="text-xl font-semibold mb-2">No Registration</h4>

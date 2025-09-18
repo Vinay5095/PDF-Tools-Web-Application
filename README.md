@@ -4,6 +4,39 @@ A comprehensive full-stack web application for PDF manipulation with integrated 
 
 ![PDF Tools Homepage](https://github.com/user-attachments/assets/888f7626-36ef-408f-a9da-fef14838c31f)
 
+## 📋 Complete Feature Overview
+
+### 🆓 Free PDF Tools
+Transform your PDFs with these powerful tools, completely free:
+
+| Tool | Description | Use Cases |
+|------|-------------|-----------|
+| **Merge PDF** | Combine multiple PDF files into one | Combining reports, merging documents |
+| **Split PDF** | Split a PDF into multiple files | Extracting chapters, separating sections |
+| **Compress PDF** | Reduce PDF file size | Email optimization, storage savings |
+| **PDF to Images** | Convert PDF pages to images | Creating thumbnails, web display |
+| **Images to PDF** | Convert images to PDF | Document creation, photo albums |
+| **PDF Info** | Extract document metadata | File analysis, document management |
+
+### 👑 Premium Features
+Advanced tools for power users and professionals:
+
+| Feature | Description | Benefits |
+|---------|-------------|----------|
+| **OCR Text Extraction** | Extract text from scanned PDFs and images | Digitize documents, make PDFs searchable |
+| **Digital Signatures** | Sign PDFs with certificates | Legal compliance, document authenticity |
+| **PDF Watermarking** | Add custom watermarks | Brand protection, copyright marking |
+| **Batch Processing** | Process multiple files simultaneously | Time savings, workflow automation |
+| **Priority Processing** | Faster processing times | Improved productivity |
+| **Higher Limits** | Larger file sizes and more operations | Handle enterprise documents |
+
+### 🔧 Technical Features
+- **100% Browser-Based**: No software installation required
+- **Privacy-First**: Files processed locally, never stored on servers
+- **Mobile-Friendly**: Responsive design works on all devices
+- **Fast Processing**: Optimized algorithms for quick results
+- **Secure**: End-to-end encryption and secure processing
+
 ## 🚀 New Features Overview
 
 ### Revenue Model
@@ -46,65 +79,102 @@ A comprehensive full-stack web application for PDF manipulation with integrated 
 
 ## 🚀 Quick Start
 
-### 1. Clone and Install
+### For Users (Using the Live Application)
+1. **Visit**: [PDF Tools Web Application](https://pdf-tools-web-app.vercel.app) *(replace with actual URL)*
+2. **Choose a Tool**: Select from merge, split, compress, or other PDF tools
+3. **Upload Files**: Drag and drop or click to upload your PDF files
+4. **Process**: Click the process button and wait for results
+5. **Download**: Get your processed PDF instantly
 
+### For Developers (Local Development)
+
+#### Prerequisites
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **PostgreSQL** - [Download here](https://postgresql.org/download/) *(optional for basic features)*
+- **Git** - [Download here](https://git-scm.com/)
+
+#### 1. Clone and Install
 ```bash
+# Clone the repository
 git clone https://github.com/Vinay5095/PDF-Tools-Web-Application.git
 cd PDF-Tools-Web-Application
+
+# Install dependencies
 npm install
 ```
 
-### 2. Environment Setup
+#### 2. Quick Development Start
+For basic PDF tools (without authentication/premium features):
+```bash
+# Start development server
+npm run dev
 
-Copy the environment template and configure your settings:
+# Open browser to http://localhost:3000
+```
 
+#### 3. Full Setup (with authentication & premium features)
+Copy the environment template and configure:
 ```bash
 cp .env.example .env.local
 ```
 
-### 3. Database Setup
-
-Initialize your PostgreSQL database with the provided schema:
-
+#### 4. Database Setup (Optional)
+For user accounts and premium features, set up PostgreSQL:
 ```bash
-psql -U your_username -d your_database -f sql/init.sql
+# Create database
+createdb pdf_tools
+
+# Initialize schema
+psql -d pdf_tools -f sql/init.sql
 ```
 
-### 4. Configure Environment Variables
-
-Edit `.env.local` with your actual credentials:
+#### 5. Environment Configuration
+Edit `.env.local` with your credentials:
 
 ```env
-# Database
+# Database (only needed for user accounts & premium features)
 DATABASE_URL="postgresql://username:password@localhost:5432/pdf_tools"
 
-# Authentication
+# Authentication (only needed for user accounts)
 NEXTAUTH_SECRET="your-secret-key-here"
 NEXTAUTH_URL="http://localhost:3000"
 GOOGLE_CLIENT_ID="your-google-oauth-client-id"
 GOOGLE_CLIENT_SECRET="your-google-oauth-client-secret"
 
-# Stripe Payment Integration (Global)
+# Payment Integration (only needed for premium features)
 STRIPE_PUBLIC_KEY="pk_test_your_stripe_public_key"
 STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key"
 STRIPE_WEBHOOK_SECRET="whsec_your_stripe_webhook_secret"
 
-# Razorpay Payment Integration (India/UPI)
+# Razorpay for India/UPI payments
 RAZORPAY_KEY_ID="rzp_test_your_razorpay_key_id"
 RAZORPAY_KEY_SECRET="your_razorpay_key_secret"
 RAZORPAY_WEBHOOK_SECRET="your_razorpay_webhook_secret"
 
-# Google AdSense
+# Google AdSense (optional)
 NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID="ca-pub-your-adsense-client-id"
 ```
 
-### 5. Run Development Server
+> **Note**: Most PDF tools work without any environment variables. Only set these up if you need user accounts, payments, or ads.
 
+#### 6. Start Development Server
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the application.
+🎉 **Success!** Open [http://localhost:3000](http://localhost:3000) to see your PDF tools in action.
+
+### 🧪 Testing
+```bash
+# Run linting
+npm run lint
+
+# Run tests (when available)
+npm test
+
+# Build for production
+npm run build
+```
 
 ## 🏗 Architecture
 
