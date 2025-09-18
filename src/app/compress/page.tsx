@@ -95,8 +95,9 @@ export default function CompressPDFPage() {
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-600 hover:text-gray-900">Home</Link>
-              <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+              <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
+              <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
+              <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
             </nav>
           </div>
         </div>
