@@ -88,10 +88,10 @@ export default function Home() {
             </div>
             <nav className="flex items-center space-x-4">
               <div className="hidden md:flex space-x-8">
-                <a href="#" className="text-gray-600 hover:text-gray-900">Home</a>
+                <span className="text-blue-600 font-medium">Home</span>
                 <Link href="/pricing" className="text-gray-600 hover:text-gray-900">Pricing</Link>
-                <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-                <a href="#" className="text-gray-600 hover:text-gray-900">Contact</a>
+                <Link href="/about" className="text-gray-600 hover:text-gray-900">About</Link>
+                <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
               </div>
               <div className="flex items-center space-x-2">
                 {session ? (
